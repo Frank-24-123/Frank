@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+</head>
+<link rel="stylesheet" href="styles.css">
+<style>
+    .auth-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    background-color: #184da8;
+}
+
+.form-card {
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    max-width: 420px;
+    width: 100%;
+    padding: 32px;
+    box-sizing: border-box;
+}
+
+.form-card h1 {
+    margin-top: 0;
+    margin-bottom: 24px;
+    font-size: 1.8rem;
+}
+
+.signup-form {
+    display: grid;
+    gap: 16px;
+    box-sizing: border-box;
+
+}
+
+.name-row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+}
+
+.name-field {
+    display: grid;
+    gap: 12px;
+}
+
+.signup-form input {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #cccccc;
+    border-radius: 8px;
+    font-size: 1rem;
+    box-sizing: border-box;
+}
+
+.signup-form input:focus {
+    outline: none;
+    border-color: #e11a17;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.15);
+}
+
+.submit-button {
+    width: 100%;
+    text-align: center;
+    background-color: #c11d1d;
+    color: #ffffff;
+    border: none;
+    padding: 12px 14px;
+    border-radius: 8px;
+    font-size: 1.25rem;
+    cursor: pointer;
+}
+
+.small-text {
+    margin-top: 18px;
+    font-size: 0.95rem;
+    color: #660909;
+}
+
+.small-text a {
+    color: #007BFF;
+    text-decoration: none;
+}
+
+.small-text a:hover {
+    text-decoration: underline;
+}
+</style>
+<body>
+    <main class="auth-page">
+        <section class="form-card">
+            <h1>Create an Sign-Up Account</h1>
+            <form class="signup-form" action="{{ url_for('register_students') }}" method="post">
+                <div class="name-row">
+                    <div class="name-field">
+                       <strong><label for="first-name">First Name</label></strong>
+                        <input id="first-name" type="text" name="firstName" placeholder="Enter your first name" required>
+                    </div>
+                    <div class="name-field">
+                        <strong><label for="last-name">Last Name</label></strong>
+                        <input id="last-name" type="text" name="lastName" placeholder="Enter your last name" required>
+                    </div>
+                </div>
+
+               <strong><label for="email">Email</label></strong>
+                <input id="email" type="email" name="email" placeholder="Enter your email @example.com" required>
+                <strong><label for="Contact">Phone number</label></strong>
+                <input id="Contact" type="text" name="Contact" placeholder="Enter your phone number xxxxx" required>
+                <strong><label for="password">Password</label></strong>
+                <input id="password" type="password" name="password" placeholder="Enter a password" required>
+
+                <strong><label for="confirm-password">Confirm Password</label></strong>
+                <input id="confirm-password" type="password" name="confirmPassword" placeholder="Repeat your password" required>
+
+                <button class="button submit-button" type="submit">Sign Up</button>
+            </form>
+            <p class="small-text">Already have an account? <a href="{{ url_for('student_login') }}">Login here</a>.</p>
+             
+        </section>
+    </main>
+   
+</body>
+</html>

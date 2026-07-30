@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Login</title>
+
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #3558ba;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        form {
+            background-color: hsl(0, 13%, 89%);
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+        .forgot-password {
+            margin-top: 10px;
+            text-align: center;
+        }
+        .forgot-password a {
+            color: #3558ba;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .forgot-password a:hover {
+            text-decoration: underline;
+        }
+    </style>
+ </head>
+<body>
+    <form action="{{ url_for('student_login') }}" method="post">
+        <h2>Student Login</h2>  
+       <strong><label for="username">Student Email:</label></strong>
+        <input type="text" id="username" name="username" required>
+        <br>
+       <strong><label for="password">Student Password:</label></strong>
+        <input type="password" id="password" name="password" required>
+        <br>
+        <input type="submit" value="Login">
+        <p class="forgot-password">
+            <a href="{{ url_for('forgot_password') }}">Forgot password?</a>
+        </p>
+        <p>Note:All Students must login to access the dashboard.</p>
+        <input type="checkbox" id="Before Login" name="remember"> 
+        <label for="remember">Remember me</label>
+        <p>Give Feedback from your last login:</p>
+        <textarea id="comment" name="comment" rows="4" cols="50"></textarea>
+        <br>
+        <p>Note: Always remember your Student ID and password.</p>
+    </form>
+    <script> 
+        const loginForm = document.querySelector('form');
+        loginForm.addEventListener('submit', event => {
+            event.preventDefault();
+            const username = document.getElementById('username').value.trim();
+            if (username) {
+                localStorage.setItem('loggedUser', username);
+                window.location.href = `/dashboard?user=${encodeURIComponent(username)}`;
+            }
+        });
+    </script>
+</body>
+</html>

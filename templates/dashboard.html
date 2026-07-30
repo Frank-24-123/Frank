@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <style>
+        .card-content {
+            margin-top: 10px;
+            max-height: 180px;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+        .upload-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .upload-list li {
+            margin-bottom: 10px;
+            padding: 8px;
+            background: #f7f7f7;
+            border-radius: 4px;
+        }
+        .upload-list a {
+            color: #3558ba;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .upload-list a:hover {
+            text-decoration: underline;
+        }
+        .upload-meta {
+            font-size: 0.9rem;
+            color: #555;
+            margin-top: 4px;
+        }
+        .delete-btn {
+            margin-top: 6px;
+            background: #d9534f;
+            color: white;
+            border: none;
+            padding: 5px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85rem;
+        }
+        .delete-btn:hover {
+            background: #c9302c;
+        }
+    </style>
+</head>
+<body>
+    <header class="header-bar">
+        <div class="header-brand">
+            <span class="logo">StudyHub</span>
+            <span class="brand-text">Student Dashboard</span>
+        </div>
+        <nav class="header-nav">
+            <a href="{{ url_for('home') }}">Home</a>
+            <a href="{{ url_for('upload_system') }}">Uploads</a>
+            <a href="{{ url_for('student_logout') }}">Logout</a>
+        </nav> 
+    </header>
+
+    <header class="dashboard-header">
+        <div>
+            <h1 id="dashboard-title">Welcome</h1>
+            <p id="welcome-subtitle" class="subtitle">Sign in to personalize your dashboard and access your student tools.</p>
+        </div>
+        
+    </header>
+
+    <main>
+        <section class="dashboard-notice" id="dashboard-notice">
+            Click any card to explore notes, assignments, or your uploads.
+        </section>
+        <section class="card-row">
+            <div class="card" data-section="notes">
+                <h2>Notes</h2>
+                <div class="card-content">
+                    <ul class="upload-list">
+                        {% for note in notes %}
+                            <li>
+                                {% if note.Note_sharing %}
+                                    <a href="{{ url_for('download_file', filename=note.Note_sharing) }}">{{ note.Note_sharing }}</a>
+                                {% else %}
+                                    <strong>Note</strong>
+                                {% endif %}
+                                {% if note.Note_writing %}
+                                    <div class="upload-meta">{{ note.Note_writing }}</div>
+                                {% endif %}
+                                <form action="{{ url_for('delete_upload', upload_id=note.id) }}" method="post" style="margin-top: 6px;">
+                                    <button class="delete-btn" type="submit">Delete</button>
+                                </form>
+                            </li>
+                        {% else %}
+                            <li>No notes uploaded yet.</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            <div class="card" data-section="assignments">
+                <h2>Assignments</h2>
+                <div class="card-content">
+                    <ul class="upload-list">
+                        {% for assignment in assignments %}
+                            <li>
+                                {% if assignment.Assignment_Sharing %}
+                                    <a href="{{ url_for('download_file', filename=assignment.Assignment_Sharing) }}">{{ assignment.Assignment_Sharing }}</a>
+                                {% endif %}
+                                {% if assignment.Comments %}
+                                    <div class="upload-meta">{{ assignment.Comments }}</div>
+                                {% endif %}
+                                <form action="{{ url_for('delete_upload', upload_id=assignment.id) }}" method="post" style="margin-top: 6px;">
+                                    <button class="delete-btn" type="submit">Delete</button>
+                                </form>
+                            </li>
+                        {% else %}
+                            <li>No assignments uploaded yet.</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            <div class="card" data-section="uploads">
+                <h2>Student Uploads</h2>
+                <div class="card-content">
+                    <ul class="upload-list">
+                        {% for upload in uploads %}
+                            <li>
+                                <strong>{{ upload.category or 'General upload' }}</strong>
+                                <div class="upload-meta">{{ upload.Note_writing or upload.Comments or 'Uploaded file available' }}</div>
+                                <form action="{{ url_for('delete_upload', upload_id=upload.id) }}" method="post" style="margin-top: 6px;">
+                                    <button class="delete-btn" type="submit">Delete</button>
+                                </form>
+                            </li>
+                        {% else %}
+                            <li>No uploads yet.</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </main>
+    <script>
+        const titleEl = document.getElementById('dashboard-title');
+        const subtitleEl = document.getElementById('welcome-subtitle');
+        const noticeEl = document.getElementById('dashboard-notice');
+
+        const params = new URLSearchParams(window.location.search);
+        const userName = params.get('user') || localStorage.getItem('loggedUser');
+
+        if (userName) {
+            titleEl.textContent = `Welcome, ${userName}`;
+            subtitleEl.textContent = `Good to see you back, ${userName}! Click a card below to get started.`;
+            localStorage.setItem('loggedUser', userName);
+        }
+
+        document.querySelectorAll('.card').forEach(card => {
+            card.addEventListener('click', () => {
+                const section = card.dataset.section;
+                if (section === 'notes') {
+                    noticeEl.textContent = 'Access your notes: upload new study files, review shared resources, and stay organized.';
+                } else if (section === 'assignments') {
+                    noticeEl.textContent = 'View assignment deadlines, upload submissions, and track your progress all in one place.';
+                } else if (section === 'uploads') {
+                    noticeEl.textContent = 'Manage your uploads, review files, and keep your student portfolio up to date.';
+                }
+            });
+        });
+    </script>
+</body>
+<footer class="footer_bar">
+    <strong><p>Frank S Dorbor Project 2026</p></strong>
+</footer>
+</html>

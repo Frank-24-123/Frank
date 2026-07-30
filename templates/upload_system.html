@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notes Upload and Assignment</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+
+<body>
+
+    <header class="header-bar">
+        <div class="header-brand">
+            <span class="logo">StudyHub</span>
+            <span class="brand-text">Notes & Assignments Portal</span>
+        </div>
+
+        <nav class="header-nav">
+            <a href="{{ url_for('dashboard') }}">Dashboard</a>
+            <a href="{{ url_for('student_logout') }}">Logout</a>
+        </nav>
+    </header>
+
+
+    <div class="dashboard-header">
+        <h1>Upload Notes and Assignments</h1>
+        <p>Select a file, choose category and upload your study material.</p>
+    </div>
+
+
+
+    <!-- ================= NOTES SECTION ================= -->
+
+    <div class="upload-section card-row">
+
+        <div class="card upload-card">
+
+            <h2>Upload Notes</h2>
+
+
+            <form class="upload-form" action="{{ url_for('upload_data') }}" method="POST" enctype="multipart/form-data">
+
+
+                <div class="form-group">
+
+                    <label for="noteFile">
+                        Select Notes File
+                    </label>
+
+                    <input type="file" id="noteFile" name="noteFile" accept=".pdf,.docx">
+
+                </div>
+
+
+
+                <div class="form-group">
+
+                    <label for="noteCategory">
+                        Choose Category
+                    </label>
+
+
+                    <select id="noteCategory" name="noteCategory" required>
+
+                        <option value="">
+                            Select category
+                        </option>
+
+                        <option value="C++">
+                            C++
+                        </option>
+
+                        <option value="Data Structures">
+                            Data Structures
+                        </option>
+
+                        <option value="Software Engineering">
+                            Software Engineering
+                        </option>
+
+                        <option value="DBMS">
+                            DBMS
+                        </option>
+
+                        <option value="Python">
+                            Python
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+
+                <div class="form-group">
+
+                    <label for="noteText">
+                        Write Note
+                    </label>
+
+
+                    <textarea id="noteText" name="noteText" rows="6" placeholder="Write your notes here...">
+        </textarea>
+
+
+                </div>
+
+
+
+                <button type="submit" class="button">
+                    Upload Note
+                </button>
+
+
+            </form>
+
+
+        </div>
+
+
+
+
+        <!-- DISPLAY NOTES -->
+
+        <div class="card note-card">
+
+    <h2>Recent Notes</h2>
+
+    {% for item in data %}
+
+        {% if item.Note_sharing or item.Note_writing %}
+
+        <div class="note-item">
+
+            {% if item.Note_sharing %}
+            <h3>
+                {{ item.Note_sharing }}
+            </h3>
+
+            <a href="{{ url_for('download_file', filename=item.Note_sharing) }}">
+                <button>
+                    Download Note
+                </button>
+            </a>
+
+            {% endif %}
+
+
+            {% if item.category %}
+            <p>
+                Category: {{ item.category }}
+            </p>
+            {% endif %}
+
+
+            {% if item.Note_writing %}
+            <p>
+                {{ item.Note_writing }}
+            </p>
+            {% endif %}
+
+
+        </div>
+
+
+        {% endif %}
+
+
+    {% else %}
+
+        <p>
+            No notes uploaded yet.
+        </p>
+
+
+    {% endfor %}
+
+</div>
+        </div>
+
+    </div>
+
+
+
+
+
+
+    <!-- ================= ASSIGNMENT SECTION ================= -->
+
+
+    <div class="upload-section card-row">
+
+
+        <div class="card upload-card">
+
+
+            <h2>
+                Upload Assignment
+            </h2>
+
+
+
+            <form class="upload-form" action="{{ url_for('upload_data') }}" method="POST" enctype="multipart/form-data">
+
+
+
+                <div class="form-group">
+
+
+                    <label for="assignmentFile">
+                        Select Assignment File
+                    </label>
+
+
+                    <input type="file" id="assignmentFile" name="assignmentFile" accept=".pdf,.docx,.zip,.pptx">
+
+
+                </div>
+
+
+
+
+                <div class="form-group">
+
+
+                    <label for="assignmentCategory">
+                        Choose Category
+                    </label>
+
+
+                    <select id="assignmentCategory" name="noteCategory" required>
+
+
+                        <option value="">
+                            Select category
+                        </option>
+
+
+                        <option value="C++">
+                            C++
+                        </option>
+
+
+                        <option value="Data Structures">
+                            Data Structures
+                        </option>
+
+
+                        <option value="Software Engineering">
+                            Software Engineering
+                        </option>
+
+
+                        <option value="DBMS">
+                            DBMS
+                        </option>
+
+
+                        <option value="Python">
+                            Python
+                        </option>
+
+
+                    </select>
+
+
+                </div>
+
+
+
+
+
+                <div class="form-group">
+
+
+                    <label for="assignmentComments">
+                        Add Comment
+                    </label>
+
+
+                    <textarea id="assignmentComments" name="assignmentComments" rows="5"
+                        placeholder="Write assignment details...">
+</textarea>
+
+
+                </div>
+
+
+
+
+                <button type="submit" class="button">
+
+                    Upload Assignment
+
+                </button>
+
+
+            </form>
+
+
+        </div>
+
+
+
+
+
+        <!-- DISPLAY ASSIGNMENTS -->
+
+
+        <div class="card note-card">
+
+
+            <h2>
+                Recent Assignments
+            </h2>
+
+
+
+            {% for item in data %}
+
+
+            {% if item.Assignment_Sharing %}
+
+
+            <div class="note-item">
+
+
+                <h3>
+                    {{ item.Assignment_Sharing }}
+                </h3>
+
+
+                <p>
+                    Category:
+                    {{ item.category }}
+                </p>
+
+
+
+                {% if item.Comments %}
+
+                <p>
+                    {{ item.Comments }}
+                </p>
+
+                {% endif %}
+
+
+
+
+                <a href="{{ url_for('download_file',
+filename=item.Assignment_Sharing) }}">
+
+
+                    <button>
+                        Download Assignment
+                    </button>
+
+
+                </a>
+
+
+
+            </div>
+
+
+            {% endif %}
+
+
+
+            {% else %}
+
+
+            <p>
+                No assignments uploaded yet.
+            </p>
+
+
+            {% endfor %}
+
+
+
+        </div>
+
+
+    </div>
+
+
+
+</body>
+
+</html>
